@@ -40,14 +40,13 @@
       <!-- Day list -->
       <div class="space-y-3 mb-20 md:mb-8">
         <div v-for="day in days" :key="day.index"
-          class="bg-white rounded-2xl shadow-sm overflow-hidden"
-          :class="{'opacity-50 pointer-events-none': day.index > currentDay}">
+          class="bg-white rounded-2xl shadow-sm overflow-hidden">
 
           <!-- Day header (always visible) -->
           <div class="flex items-center justify-between p-5 cursor-pointer" @click="toggleDay(day.index)">
             <div class="flex items-center gap-4">
               <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-                :class="completedDays.includes(day.index) ? 'bg-coral text-white' : day.index === currentDay ? 'bg-coral/20 text-coral' : 'bg-gray-100 text-gray-300'">
+                :class="completedDays.includes(day.index) ? 'bg-coral text-white' : 'bg-coral/20 text-coral'">
                 <svg v-if="completedDays.includes(day.index)" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                 <span v-else>{{ day.index }}</span>
               </div>
@@ -61,7 +60,7 @@
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
-              <NuxtLink v-if="(day.type === 'practice' || day.type === 'test') && day.index <= currentDay"
+              <NuxtLink v-if="day.type === 'practice' || day.type === 'test'"
                 :to="`/canvas?unit=${unit.id}&day=${day.index}`"
                 class="bg-coral text-white px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors"
                 @click.stop>

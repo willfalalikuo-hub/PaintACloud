@@ -70,44 +70,45 @@
               <span class="text-sm text-gray-500">技法准确度</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-coral rounded-full" :style="{ width: (score?.technique || 0) * 20 + '%' }"></div>
+                  <div class="h-full bg-coral rounded-full" :style="{ width: (score?.technique || 0) * 10 + '%' }"></div>
                 </div>
-                <span class="text-sm font-bold text-gray-800">{{ score?.technique || 0 }}/5</span>
+                <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.technique || 0 }}</span>
               </div>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-500">造型能力</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-lavender rounded-full" :style="{ width: (score?.shape || 0) * 20 + '%' }"></div>
+                  <div class="h-full bg-lavender rounded-full" :style="{ width: (score?.shape || 0) * 10 + '%' }"></div>
                 </div>
-                <span class="text-sm font-bold text-gray-800">{{ score?.shape || 0 }}/5</span>
+                <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.shape || 0 }}</span>
               </div>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-500">光影表现</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-mint rounded-full" :style="{ width: (score?.light || 0) * 20 + '%' }"></div>
+                  <div class="h-full bg-mint rounded-full" :style="{ width: (score?.light || 0) * 10 + '%' }"></div>
                 </div>
-                <span class="text-sm font-bold text-gray-800">{{ score?.light || 0 }}/5</span>
+                <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.light || 0 }}</span>
               </div>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-500">整体完成度</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-amber-400 rounded-full" :style="{ width: (score?.completeness || 0) * 20 + '%' }"></div>
+                  <div class="h-full bg-amber-400 rounded-full" :style="{ width: (score?.completeness || 0) * 10 + '%' }"></div>
                 </div>
-                <span class="text-sm font-bold text-gray-800">{{ score?.completeness || 0 }}/5</span>
+                <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.completeness || 0 }}</span>
               </div>
             </div>
           </div>
 
           <!-- Total score -->
           <div class="text-center mb-4">
-            <span class="text-4xl font-bold text-coral">{{ score?.total || 0 }}</span>
-            <span class="text-gray-400 text-lg">/5</span>
+            <span class="text-4xl font-bold" :class="scoreGrade.class">{{ score?.total || 0 }}</span>
+            <span class="text-gray-400 text-lg">/10</span>
+            <div class="text-sm mt-1" :class="scoreGrade.class">{{ scoreGrade.label }}</div>
           </div>
 
           <p class="text-center text-sm text-gray-500 mb-6">{{ score?.comment || '' }}</p>
@@ -211,6 +212,15 @@ const currentStep = ref(0)
 const showScore = ref(false)
 const score = ref<AIScore | null>(null)
 const loading = ref(false)
+
+const scoreGrade = computed(() => {
+  const t = score.value?.total || 0
+  if (t >= 9) return { label: '优秀', class: 'text-coral' }
+  if (t >= 7) return { label: '良好', class: 'text-emerald-500' }
+  if (t >= 5) return { label: '中等', class: 'text-amber-500' }
+  if (t >= 3) return { label: '待提高', class: 'text-orange-500' }
+  return { label: '需要加把劲', class: 'text-red-400' }
+})
 
 async function submitScore() {
   loading.value = true

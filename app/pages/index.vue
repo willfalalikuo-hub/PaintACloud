@@ -1,26 +1,23 @@
 <template>
   <div class="p-4 md:p-8 max-w-6xl mx-auto">
-    <header class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-gray-800">发现</h1>
-      <p class="text-gray-500 mt-1">找到适合你的画风课程</p>
-    </header>
-
-    <!-- Daily painting card -->
-    <div class="bg-gradient-to-r from-coral/20 to-lavender/20 rounded-2xl p-6 mb-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500">今日一画</p>
-          <h2 class="text-xl font-bold text-gray-800 mt-1">开始你的绘画练习</h2>
-          <p class="text-gray-500 mt-2 text-sm">选择一个课程开始吧</p>
-          <NuxtLink to="/canvas" class="inline-block mt-4 bg-coral text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-coral/90 transition-colors">
-            开始画画
-          </NuxtLink>
+    <!-- Pinned daily card (hero style) -->
+    <NuxtLink to="/canvas" class="block mb-8 group">
+      <div class="relative rounded-2xl overflow-hidden shadow-lg h-52 md:h-64">
+        <img :src="dailyImageUrl" alt="" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-coral animate-pulse"></span>
+            <span class="text-white/80 text-xs font-medium">今日一画</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold text-white">开始你的绘画练习</h2>
+          <p class="text-white/70 text-sm mt-1">每天一幅画，进步看得见</p>
         </div>
-        <div class="hidden sm:flex w-32 h-32 bg-white/50 rounded-xl items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-coral/60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+        <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-medium group-hover:bg-coral/80 transition-colors">
+          去画画
         </div>
       </div>
-    </div>
+    </NuxtLink>
 
     <!-- Hot courses from PocketBase -->
     <section class="mb-8">
@@ -30,16 +27,22 @@
           v-for="course in courses"
           :key="course.id"
           :to="`/course/${course.id}`"
-          class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
         >
-          <div class="aspect-square rounded-xl mb-3 flex items-center justify-center" :style="{ backgroundColor: (course.color || '#FF6B6B') + '20' }">
-            <span class="text-3xl font-bold" :style="{ color: course.color || '#FF6B6B' }">{{ course.icon || 'P' }}</span>
+          <div class="aspect-video relative overflow-hidden">
+            <img :src="course.cover || getCourseImageUrl(course.id)" alt="" class="w-full h-full object-cover" loading="lazy" />
+            <div class="absolute inset-0" :style="{ background: `linear-gradient(to bottom, transparent 50%, ${(course.color || '#FF6B6B')}cc 100%)` }"></div>
+            <div class="absolute bottom-2 left-3 flex items-center gap-1.5">
+              <span class="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold" :style="{ backgroundColor: (course.color || '#FF6B6B') + '30', color: course.color || '#FF6B6B' }">{{ course.icon || 'P' }}</span>
+              <span class="text-white text-xs font-medium drop-shadow">{{ course.name }}</span>
+            </div>
           </div>
-          <h3 class="font-bold text-gray-800 text-sm">{{ course.name }}</h3>
-          <p class="text-xs text-gray-400 mt-1">{{ course.unit_count || 0 }}个技法单元</p>
-          <span v-if="course.tag" class="inline-block mt-2 text-xs px-2 py-0.5 rounded-full bg-coral/10 text-coral">
-            {{ course.tag }}
-          </span>
+          <div class="p-3">
+            <p class="text-xs text-gray-400">{{ course.unit_count || 0 }}个技法单元</p>
+            <span v-if="course.tag" class="inline-block mt-1.5 text-xs px-2 py-0.5 rounded-full bg-coral/10 text-coral">
+              {{ course.tag }}
+            </span>
+          </div>
         </NuxtLink>
       </div>
       <div v-else class="text-center py-8 text-gray-300">加载中...</div>
@@ -62,7 +65,7 @@
           <span class="text-gray-400">日</span>
           <span v-for="d in firstDayOffset" :key="'e'+d" class="py-2 text-gray-200">-</span>
           <span v-for="d in daysInMonth" :key="d" class="py-2 rounded-full"
-            :class="checkinDates.includes(d) ? 'bg-coral text-white font-bold' : d === today ? 'bg-coral/20 text-coral font-bold' : 'text-gray-600'">
+            :class="checkinDates.includes(d) ? 'bg-coral text-white font-bold' : d === todayDate ? 'bg-coral/20 text-coral font-bold' : 'text-gray-600'">
             {{ d }}
           </span>
         </div>
@@ -82,11 +85,22 @@ interface Course {
   color: string
   tag: string
   unit_count: number
+  cover: string
 }
 
 const courses = ref<Course[]>([])
 const streakDays = ref(0)
 const checkinDates = ref<number[]>([])
+
+// Daily random image (changes daily)
+const todayObj = new Date()
+const dailySeed = `paint-${todayObj.getFullYear()}-${todayObj.getMonth()}-${todayObj.getDate()}`
+const dailyImageUrl = `https://picsum.photos/seed/${dailySeed}/800/400`
+
+// Fallback course image by id
+function getCourseImageUrl(courseId: string) {
+  return `https://picsum.photos/seed/course-${courseId}/400/240`
+}
 
 // Fetch courses
 const { data } = await useAsyncData('courses', () =>
@@ -95,18 +109,16 @@ const { data } = await useAsyncData('courses', () =>
 if (data.value) courses.value = data.value
 
 // Fetch checkins if logged in
+const todayDate = todayObj.getDate()
 if (isLoggedIn.value) {
   try {
     const checkins = await pb.collection('checkins').getFullList({ filter: `user_id="${pb.authStore.record?.id}"` })
-    const now = new Date()
     checkinDates.value = checkins
-      .filter((c: any) => c.date?.startsWith(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`))
+      .filter((c: any) => c.date?.startsWith(`${todayObj.getFullYear()}-${String(todayObj.getMonth()+1).padStart(2,'0')}`))
       .map((c: any) => parseInt(c.date.split('-')[2]))
   } catch {}
 }
 
-const now = new Date()
-const today = now.getDate()
-const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-const firstDayOffset = (new Date(now.getFullYear(), now.getMonth(), 1).getDay() + 6) % 7
+const daysInMonth = new Date(todayObj.getFullYear(), todayObj.getMonth() + 1, 0).getDate()
+const firstDayOffset = (new Date(todayObj.getFullYear(), todayObj.getMonth(), 1).getDay() + 6) % 7
 </script>
