@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-const { pb, isLoggedIn } = usePocketBase()
+const { isLoggedIn, getCourses } = usePocketBase()
 
 interface Course {
   id: string
@@ -102,23 +102,11 @@ function getCourseImageUrl(courseId: string) {
   return `https://picsum.photos/seed/course-${courseId}/400/240`
 }
 
-// Fetch courses
-const { data } = await useAsyncData('courses', () =>
-  pb.collection('courses').getFullList<Course>()
-)
-if (data.value) courses.value = data.value
+// Fetch courses (static JSON or PocketBase)
+const data = await getCourses()
+courses.value = data || []
 
-// Fetch checkins if logged in
 const todayDate = todayObj.getDate()
-if (isLoggedIn.value) {
-  try {
-    const checkins = await pb.collection('checkins').getFullList({ filter: `user_id="${pb.authStore.record?.id}"` })
-    checkinDates.value = checkins
-      .filter((c: any) => c.date?.startsWith(`${todayObj.getFullYear()}-${String(todayObj.getMonth()+1).padStart(2,'0')}`))
-      .map((c: any) => parseInt(c.date.split('-')[2]))
-  } catch {}
-}
-
 const daysInMonth = new Date(todayObj.getFullYear(), todayObj.getMonth() + 1, 0).getDate()
 const firstDayOffset = (new Date(todayObj.getFullYear(), todayObj.getMonth(), 1).getDay() + 6) % 7
 </script>

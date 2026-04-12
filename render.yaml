@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: paintcloud-pb
+    runtime: image
+    image:
+      url: ghcr.io/muchobien/pocketbase:latest
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: "8090"
+    disk:
+      name: pb-data
+      mountPath: /pb_data
+      sizeGB: 1

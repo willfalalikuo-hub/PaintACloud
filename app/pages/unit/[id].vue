@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-const { pb, isLoggedIn } = usePocketBase()
+const { isLoggedIn, getUnit } = usePocketBase()
 const route = useRoute()
 const unitId = route.params.id as string
 
@@ -125,10 +125,7 @@ const completedDays = ref<number[]>([])
 const expandedDay = ref<number | null>(null)
 
 // Fetch unit data
-const { data } = await useAsyncData(`unit-${unitId}`, () =>
-  pb.collection('units').getOne(unitId)
-)
-if (data.value) unit.value = data.value
+unit.value = await getUnit(unitId)
 
 const days = computed(() => {
   if (!unit.value?.days) return []
@@ -154,26 +151,9 @@ function toggleDay(dayIndex: number) {
   expandedDay.value = expandedDay.value === dayIndex ? null : dayIndex
 }
 
-// Load enrollment progress
-if (isLoggedIn.value && unit.value) {
-  try {
-    const enrollments = await pb.collection('enrollments').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}" && course_id="${unit.value.course_id}"`
-    })
-    if (enrollments.length) {
-      currentDay.value = enrollments[0].current_day || 1
-      if (!enrollments[0].current_unit_id || enrollments[0].current_unit_id !== unitId) {
-        await pb.collection('enrollments').update(enrollments[0].id, { current_unit_id: unitId })
-      }
-    }
-    const practices = await pb.collection('practices').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}" && unit="${unitId}"`
-    })
-    completedDays.value = [...new Set(practices.map((p: any) => p.day_index).filter(Boolean))]
-  } catch {}
-
-  // Auto expand current day
-  expandedDay.value = currentDay.value
+// Load enrollment progress (simplified for static mode)
+if (unit.value) {
+  expandedDay.value = 1
 }
 
 function typeLabel(type: string) {

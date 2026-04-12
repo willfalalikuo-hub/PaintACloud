@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-const { pb, isLoggedIn } = usePocketBase()
+const { isLoggedIn, getCourse, getUnits } = usePocketBase()
 const route = useRoute()
 const courseId = route.params.id as string
 
@@ -82,25 +82,12 @@ const diffMap: Record<string, string> = { beginner: '入门', intermediate: '进
 const diffLabel = computed(() => course.value ? diffMap[course.value.difficulty] || '' : '')
 
 // Fetch course and units
-const { data: courseData } = await useAsyncData(`course-${courseId}`, async () => {
-  const c = await pb.collection('courses').getOne(courseId)
-  const u = await pb.collection('units').getFullList({ filter: `course_id="${courseId}"`, sort: 'unit_index' })
-  return { course: c, units: u }
-})
-
-if (courseData.value) {
-  course.value = courseData.value.course
-  units.value = courseData.value.units
-}
+course.value = await getCourse(courseId)
+units.value = await getUnits(courseId)
 
 // Check enrollment
 if (isLoggedIn.value) {
-  try {
-    const existing = await pb.collection('enrollments').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}" && course_id="${courseId}"`
-    })
-    enrolled.value = existing.length > 0
-  } catch {}
+  enrolled.value = true // simplified for static mode
 }
 
 async function joinCourse() {
@@ -108,15 +95,6 @@ async function joinCourse() {
     return navigateTo('/auth/login')
   }
   try {
-    // Find first unit of the course
-    const firstUnit = units.value.length ? units.value[0].id : ''
-    await pb.collection('enrollments').create({
-      user_id: pb.authStore.record!.id,
-      course_id: courseId,
-      current_unit_id: firstUnit,
-      current_day: 1,
-      status: 'active'
-    })
     enrolled.value = true
   } catch (e) {
     console.error('Join failed', e)

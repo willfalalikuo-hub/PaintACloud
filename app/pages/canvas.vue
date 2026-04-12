@@ -174,21 +174,21 @@ definePageMeta({
   layout: false,
 })
 
-const { pb, isLoggedIn } = usePocketBase()
+const { isLoggedIn, getUnit } = usePocketBase()
 const route = useRoute()
 
 // Parse route params
 const unitId = route.query.unit as string
 const dayIndex = parseInt(route.query.day as string) || 0
 
-// Find current day info from PocketBase
+// Find current day info
 let currentDay: any = null
 let unitName = ''
 let unitData: any = null
 
 if (unitId) {
   try {
-    unitData = await pb.collection('units').getOne(unitId)
+    unitData = await getUnit(unitId)
     unitName = unitData.name
     const days = typeof unitData.days === 'string' ? JSON.parse(unitData.days) : (unitData.days || [])
     currentDay = days.find((d: any) => d.index === dayIndex) || null
