@@ -130,37 +130,62 @@
         "description": "了解线条的种类和画法要点。学习如何控制手腕和手臂来画出稳定的线条。",
         "index": 1,
         "title": "线条基础讲解",
-        "type": "theory"
+        "type": "theory",
+        "steps": [
+          {
+            "index": 1,
+            "title": "直线练习",
+            "description": "画一组平行直线",
+            "referenceImage": "/images/references/basic-1/demo/step1-lines.png"
+          },
+          {
+            "index": 2,
+            "title": "曲线练习",
+            "description": "画流畅的S型曲线",
+            "referenceImage": "/images/references/basic-1/demo/step2-curves.png"
+          },
+          {
+            "index": 3,
+            "title": "波浪线",
+            "description": "画出有节奏感的波浪线",
+            "referenceImage": "/images/references/basic-1/demo/step3-waves.png"
+          }
+        ]
       },
       {
         "description": "在指定区域内练习水平、垂直、斜线排线，注意线条间距均匀。",
         "index": 2,
         "title": "直线排线练习",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/straight-hatching.jpg"
       },
       {
         "description": "用两组交叉排线表现不同的灰度层次，掌握交叉排线技法。",
         "index": 3,
         "title": "交叉排线练习",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/cross-hatching.jpg"
       },
       {
         "description": "沿着曲面方向排线，表现物体的立体感，练习球体弧形排线。",
         "index": 4,
         "title": "曲线排线练习",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/curve-hatching.jpg"
       },
       {
         "description": "综合运用排线技法为球体上色，表现完整的明暗关系。",
         "index": 5,
         "title": "综合排线 - 球体",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/ball-hatching.jpg"
       },
       {
         "description": "30分钟内完成球体+正方体的排线素描，检验综合运用能力。",
         "index": 6,
         "title": "综合测试",
-        "type": "test"
+        "type": "test",
+        "referenceImage": "/images/references/basic-1/reference/complete-hatching.jpg"
       },
       {
         "description": "查看本周综合评分，决定是否通关进入下一单元。",
@@ -310,37 +335,56 @@
         "description": "理解三大面五调子，掌握光影的基本规律。",
         "index": 1,
         "title": "光影原理讲解",
-        "type": "theory"
+        "type": "theory",
+        "steps": [
+          {
+            "index": 1,
+            "title": "三大面",
+            "description": "亮面、灰面、暗面",
+            "referenceImage": "/images/references/basic-2/demo/three-planes.png"
+          },
+          {
+            "index": 2,
+            "title": "五调子",
+            "description": "高光、灰调、明暗交界线、反光、投影",
+            "referenceImage": "/images/references/basic-2/demo/five-tones.png"
+          }
+        ]
       },
       {
         "description": "画出球体的五调子，练习明暗渐变过渡。",
         "index": 2,
         "title": "球体光影",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/sphere-light.jpg"
       },
       {
         "description": "表现正方体三个面的明暗差异和透视关系。",
         "index": 3,
         "title": "正方体光影",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/cube-light.jpg"
       },
       {
         "description": "掌握圆柱体侧面的线性渐变明暗。",
         "index": 4,
         "title": "圆柱体光影",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/cylinder-light.jpg"
       },
       {
         "description": "画两个几何体组合，统一光源，处理遮挡和投影关系。",
         "index": 5,
         "title": "组合几何体",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/geometry-group.jpg"
       },
       {
         "description": "40分钟完成三几何体组合光影素描，检验综合能力。",
         "index": 6,
         "title": "综合测试",
-        "type": "test"
+        "type": "test",
+        "referenceImage": "/images/references/basic-2/reference/geometry-group.jpg"
       },
       {
         "description": "查看评分，回顾本周光影知识。",
@@ -482,37 +526,56 @@
         "description": "理解光滑度、透明度、硬度对质感的影响。",
         "index": 1,
         "title": "质感表现原理",
-        "type": "theory"
+        "type": "theory",
+        "steps": [
+          {
+            "index": 1,
+            "title": "光滑质感",
+            "description": "金属、玻璃等光滑表面的特征",
+            "referenceImage": "/images/references/basic-3/demo/smooth-texture.png"
+          },
+          {
+            "index": 2,
+            "title": "粗糙质感",
+            "description": "木头、布料等粗糙表面的特征",
+            "referenceImage": "/images/references/basic-3/demo/rough-texture.png"
+          }
+        ]
       },
       {
         "description": "练习金属的高对比明暗和锐利高光。",
         "index": 2,
         "title": "金属质感",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-3/reference/metal-cup.jpg"
       },
       {
         "description": "学习木纹的方向性纹理画法。",
         "index": 3,
         "title": "木质质感",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-3/reference/wood-texture.jpg"
       },
       {
         "description": "掌握透明材质的通透感和表面反射。",
         "index": 4,
         "title": "玻璃质感",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-3/reference/glass-cup.jpg"
       },
       {
         "description": "练习柔和褶皱和宽高光的表现。",
         "index": 5,
         "title": "布料质感",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-3/reference/cloth-folds.jpg"
       },
       {
         "description": "画一组3种材质的静物组合，50分钟完成。",
         "index": 6,
         "title": "综合测试",
-        "type": "test"
+        "type": "test",
+        "referenceImage": "/images/references/basic-3/reference/still-life.jpg"
       },
       {
         "description": "查看评分，回顾四种质感的表现方法。",
@@ -637,37 +700,56 @@
         "description": "铅笔、橡皮、纸张的选择和正确使用方法。",
         "index": 1,
         "title": "素描工具介绍",
-        "type": "theory"
+        "type": "theory",
+        "steps": [
+          {
+            "index": 1,
+            "title": "铅笔硬度",
+            "description": "HB、2B、4B等不同硬度的效果",
+            "referenceImage": "/images/references/basic-1/demo/step1-lines.png"
+          },
+          {
+            "index": 2,
+            "title": "握笔姿势",
+            "description": "正确的握笔方式",
+            "referenceImage": "/images/references/basic-1/demo/step2-curves.png"
+          }
+        ]
       },
       {
         "description": "用不同硬度铅笔做出均匀的灰度条，掌握灰度控制。",
         "index": 2,
         "title": "铅笔灰度练习",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/straight-hatching.jpg"
       },
       {
         "description": "练习均匀排线、渐变排线、粗细变化排线和点排。",
         "index": 3,
         "title": "排线技法精练",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/cross-hatching.jpg"
       },
       {
         "description": "学习用纸笔和手指涂抹的技法，制造柔和平滑的渐变。",
         "index": 4,
         "title": "涂抹技法",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/curve-hatching.jpg"
       },
       {
         "description": "学习用橡皮提亮和制造高光效果，掌握减法画法。",
         "index": 5,
         "title": "擦提技法",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-1/reference/ball-hatching.jpg"
       },
       {
         "description": "画一个从白到黑的完整灰度渐变条，检验力度控制。",
         "index": 6,
         "title": "灰度过渡测试",
-        "type": "test"
+        "type": "test",
+        "referenceImage": "/images/references/basic-1/reference/complete-hatching.jpg"
       },
       {
         "description": "查看评分，决定是否通关进入石膏几何体单元。",
@@ -805,37 +887,56 @@
         "description": "学习观察测量法和完整的素描流程。",
         "index": 1,
         "title": "石膏几何体分析方法",
-        "type": "theory"
+        "type": "theory",
+        "steps": [
+          {
+            "index": 1,
+            "title": "测量方法",
+            "description": "铅笔测量的比例对比法",
+            "referenceImage": "/images/references/basic-2/demo/three-planes.png"
+          },
+          {
+            "index": 2,
+            "title": "光影分析",
+            "description": "确定光源和明暗区域",
+            "referenceImage": "/images/references/basic-2/demo/five-tones.png"
+          }
+        ]
       },
       {
         "description": "完成带背景的完整石膏球体素描。",
         "index": 2,
         "title": "石膏球体",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/sphere-light.jpg"
       },
       {
         "description": "练习方体的透视和三面明暗。",
         "index": 3,
         "title": "石膏正方体",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/cube-light.jpg"
       },
       {
         "description": "掌握椭圆透视和圆柱体明暗。",
         "index": 4,
         "title": "石膏圆柱",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/cylinder-light.jpg"
       },
       {
         "description": "画两个石膏的组合，处理空间关系。",
         "index": 5,
         "title": "石膏组合",
-        "type": "practice"
+        "type": "practice",
+        "referenceImage": "/images/references/basic-2/reference/geometry-group.jpg"
       },
       {
         "description": "60分钟完成三石膏组合素描。",
         "index": 6,
         "title": "综合测试",
-        "type": "test"
+        "type": "test",
+        "referenceImage": "/images/references/basic-2/reference/geometry-group.jpg"
       },
       {
         "description": "查看评分，回顾整个基础课程的收获。",
