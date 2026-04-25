@@ -78,13 +78,24 @@ async function handleSubmit() {
   errorMsg.value = ''
   try {
     if (isRegister.value) {
+      if (!nickname.value.trim()) {
+        errorMsg.value = '请输入昵称'
+        return
+      }
       await register(email.value, password.value, nickname.value)
     } else {
       await login(email.value, password.value)
     }
     router.push('/')
   } catch (e: any) {
-    errorMsg.value = e?.message?.includes('email') ? '邮箱已存在' : '操作失败，请检查输入'
+    const msg = e?.message || ''
+    if (msg.includes('email') || msg.includes('邮箱已存在')) {
+      errorMsg.value = '邮箱已存在'
+    } else if (msg.includes('密码') || msg.includes('password')) {
+      errorMsg.value = '邮箱或密码错误'
+    } else {
+      errorMsg.value = msg || '操作失败，请检查输入'
+    }
   } finally {
     loading.value = false
   }

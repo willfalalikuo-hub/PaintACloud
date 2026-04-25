@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
 
   app: {
+    baseURL: '/PaintACloud/',
     head: {
       title: 'paintCloud',
       meta: [
@@ -21,12 +22,5 @@ export default defineNuxtConfig({
 
   css: [
     '~/assets/css/main.css',
-    'tldraw/tldraw.css',
   ],
-
-  vite: {
-    optimizeDeps: {
-      include: ['react', 'react-dom', 'tldraw'],
-    },
-  },
 })

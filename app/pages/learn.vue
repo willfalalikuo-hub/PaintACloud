@@ -61,7 +61,8 @@
 </template>
 
 <script setup lang="ts">
-const { pb, isLoggedIn } = usePocketBase()
+const { pb, isLoggedIn, getCourse, getUnit } = usePocketBase()
+const { getEnrollments, getCompletedDays } = useLocalStore()
 
 interface EnrollmentItem {
   enrollment: any
@@ -74,38 +75,46 @@ const enrollments = ref<EnrollmentItem[]>([])
 
 if (isLoggedIn.value) {
   try {
-    const userId = pb.authStore.record!.id
+    if (pb) {
+      const userId = pb.authStore.record!.id
 
-    // Get all enrollments
-    const enrollmentList = await pb.collection('enrollments').getFullList({
-      filter: `user_id="${userId}"`,
-      sort: '-created'
-    })
+      const enrollmentList = await pb.collection('enrollments').getFullList({
+        filter: `user_id="${userId}"`,
+        sort: '-created'
+      })
 
-    // Enrich with course and unit data
-    for (const e of enrollmentList) {
-      let course = null
-      let currentUnit = null
-      let completedCount = 0
+      for (const e of enrollmentList) {
+        let course = null
+        let currentUnit = null
+        let completedCount = 0
 
-      try {
-        course = await pb.collection('courses').getOne(e.course_id)
-      } catch {}
-
-      if (e.current_unit_id) {
+        try { course = await pb.collection('courses').getOne(e.course_id) } catch {}
+        if (e.current_unit_id) {
+          try { currentUnit = await pb.collection('units').getOne(e.current_unit_id) } catch {}
+        }
         try {
-          currentUnit = await pb.collection('units').getOne(e.current_unit_id)
+          const practices = await pb.collection('practices').getFullList({
+            filter: `user_id="${userId}" && unit="${e.current_unit_id || ''}"`
+          })
+          completedCount = practices.length
         } catch {}
+
+        enrollments.value.push({ enrollment: e, course, currentUnit, completedCount })
       }
-
-      try {
-        const practices = await pb.collection('practices').getFullList({
-          filter: `user_id="${userId}" && unit="${e.current_unit_id || ''}"`
+    } else {
+      // Local mode
+      const localEnrollments = getEnrollments()
+      for (const e of localEnrollments) {
+        const course = await getCourse(e.courseId)
+        const currentUnit = course ? (await getUnit(course.id)) : null
+        const completedCount = currentUnit ? getCompletedDays(currentUnit.id).length : 0
+        enrollments.value.push({
+          enrollment: { id: e.courseId, course_id: e.courseId, current_day: e.currentDay || 1 },
+          course,
+          currentUnit,
+          completedCount,
         })
-        completedCount = practices.length
-      } catch {}
-
-      enrollments.value.push({ enrollment: e, course, currentUnit, completedCount })
+      }
     }
   } catch {}
 }

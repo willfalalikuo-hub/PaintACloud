@@ -56,7 +56,7 @@
       <div v-if="practices.length" class="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4">
         <div v-for="p in practices" :key="p.id" class="bg-gray-50 rounded-xl overflow-hidden">
           <div class="aspect-square bg-gray-100 flex items-center justify-center relative">
-            <img v-if="p.image" :src="pb.files.getURL(p, p.image)" class="w-full h-full object-cover" />
+            <img v-if="p.image" :src="getImageUrl(p)" class="w-full h-full object-cover" />
             <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             <!-- Score badge -->
             <div v-if="p.ai_score" class="absolute bottom-1 right-1 bg-white/90 rounded-full px-1.5 py-0.5 text-xs font-bold"
@@ -89,6 +89,7 @@
 
 <script setup lang="ts">
 const { pb, user, isLoggedIn, logout } = usePocketBase()
+const { getPractices, getEnrollments, getStreakDays } = useLocalStore()
 const router = useRouter()
 
 const practices = ref<any[]>([])
@@ -102,34 +103,40 @@ const menuItems = [
 
 if (isLoggedIn.value) {
   try {
-    practices.value = await pb.collection('practices').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}"`,
-      sort: '-created'
-    })
-    const enrollments = await pb.collection('enrollments').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}"`
-    })
-    enrollCount.value = enrollments.length
+    if (pb) {
+      practices.value = await pb.collection('practices').getFullList({
+        filter: `user_id="${pb.authStore.record?.id}"`,
+        sort: '-created'
+      })
+      const enrollments = await pb.collection('enrollments').getFullList({
+        filter: `user_id="${pb.authStore.record?.id}"`
+      })
+      enrollCount.value = enrollments.length
 
-    // Calculate streak
-    const checkins = await pb.collection('checkins').getFullList({
-      filter: `user_id="${pb.authStore.record?.id}"`,
-      sort: '-date'
-    })
-    if (checkins.length) {
-      let streak = 0
-      const today = new Date()
-      for (let i = 0; i < 365; i++) {
-        const d = new Date(today)
-        d.setDate(d.getDate() - i)
-        const ds = d.toISOString().split('T')[0]
-        if (checkins.some((c: any) => c.date === ds)) {
-          streak++
-        } else if (i > 0) {
-          break
+      const checkins = await pb.collection('checkins').getFullList({
+        filter: `user_id="${pb.authStore.record?.id}"`,
+        sort: '-date'
+      })
+      if (checkins.length) {
+        let streak = 0
+        const today = new Date()
+        for (let i = 0; i < 365; i++) {
+          const d = new Date(today)
+          d.setDate(d.getDate() - i)
+          const ds = d.toISOString().split('T')[0]
+          if (checkins.some((c: any) => c.date === ds)) {
+            streak++
+          } else if (i > 0) {
+            break
+          }
         }
+        streakDays.value = streak
       }
-      streakDays.value = streak
+    } else {
+      // Local mode
+      practices.value = getPractices()
+      enrollCount.value = getEnrollments().length
+      streakDays.value = getStreakDays()
     }
   } catch {}
 }
@@ -140,7 +147,14 @@ function handleLogout() {
 }
 
 function getScoreObj(p: any) {
-  if (!p.ai_score) return null
-  return typeof p.ai_score === 'string' ? JSON.parse(p.ai_score) : p.ai_score
+  if (!p.ai_score && !p.aiScore) return null
+  const raw = p.ai_score || p.aiScore
+  return typeof raw === 'string' ? JSON.parse(raw) : raw
+}
+
+function getImageUrl(p: any) {
+  if (p.image.startsWith('data:') || p.image.startsWith('http')) return p.image
+  if (pb) return pb.files.getURL(p, p.image)
+  return p.image
 }
 </script>

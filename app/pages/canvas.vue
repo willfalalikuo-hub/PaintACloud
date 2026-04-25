@@ -10,8 +10,8 @@
         <button @click="showUpload = true" class="text-sm text-gray-300 hover:text-white transition-colors px-2">
           上传
         </button>
-        <button @click="submitScore" class="bg-coral text-white px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors">
-          提交评分
+        <button @click="submitScore" :disabled="loading" class="bg-coral text-white px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors disabled:opacity-50">
+          {{ loading ? '评分中...' : '提交评分' }}
         </button>
       </div>
     </div>
@@ -25,7 +25,7 @@
         </ClientOnly>
       </div>
 
-      <!-- Reference image panel (desktop: right side, mobile: toggle) -->
+      <!-- Reference image panel (desktop: right side) -->
       <div v-if="showReference && referenceImages.length" class="hidden md:flex flex-col w-64 bg-gray-800 border-l border-gray-700">
         <div class="p-3 border-b border-gray-700">
           <h3 class="text-xs text-gray-400 font-medium">参考图</h3>
@@ -104,6 +104,15 @@
             </div>
           </div>
 
+          <!-- AI suggestions -->
+          <div v-if="score?.suggestions?.length" class="mb-4 bg-lavender/5 rounded-xl p-3">
+            <h4 class="text-xs font-bold text-lavender mb-2">改进建议</h4>
+            <div v-for="(s, i) in score.suggestions" :key="i" class="flex items-start gap-2 mb-1">
+              <span class="text-lavender text-xs mt-0.5">{{ i + 1 }}.</span>
+              <span class="text-xs text-gray-600">{{ s }}</span>
+            </div>
+          </div>
+
           <!-- Total score -->
           <div class="text-center mb-4">
             <span class="text-4xl font-bold" :class="scoreGrade.class">{{ score?.total || 0 }}</span>
@@ -133,24 +142,21 @@
           <p class="text-sm text-gray-400 text-center mb-4">拍照或从相册选择你的画作</p>
 
           <label class="block w-full aspect-square border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:border-coral/50 transition-colors mb-4">
-            <div class="text-center">
+            <div v-if="!uploadPreview" class="text-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
               <p class="text-sm text-gray-400">点击选择图片</p>
             </div>
+            <img v-else :src="uploadPreview" class="w-full h-full object-contain rounded-lg" />
             <input type="file" accept="image/*" capture="environment" class="hidden" @change="handleUpload" />
           </label>
-
-          <!-- Preview -->
-          <div v-if="uploadPreview" class="mb-4">
-            <img :src="uploadPreview" class="w-full rounded-xl" />
-          </div>
 
           <button
             v-if="uploadPreview"
             @click="confirmUpload"
-            class="w-full bg-coral text-white py-2.5 rounded-full text-sm font-medium hover:bg-coral/90 transition-colors"
+            :disabled="loading"
+            class="w-full bg-coral text-white py-2.5 rounded-full text-sm font-medium hover:bg-coral/90 transition-colors disabled:opacity-50"
           >
-            确认上传并评分
+            {{ loading ? '评分中...' : '确认上传并评分' }}
           </button>
         </div>
       </div>
@@ -168,14 +174,15 @@
 </template>
 
 <script setup lang="ts">
-import type { AIScore, Day } from '~/types'
+import type { AIScore } from '~/types'
 
 definePageMeta({
   layout: false,
 })
 
-const { isLoggedIn, getUnit } = usePocketBase()
+const { isLoggedIn, getUnit, pb } = usePocketBase()
 const route = useRoute()
+const store = useLocalStore()
 
 // Parse route params
 const unitId = route.query.unit as string
@@ -222,48 +229,112 @@ const scoreGrade = computed(() => {
   return { label: '需要加把劲', class: 'text-red-400' }
 })
 
-async function submitScore() {
-  loading.value = true
+// Client-side fallback scoring (for static deployment)
+function fallbackScore(): AIScore {
+  const technique = Math.round((Math.random() * 7 + 2) * 10) / 10
+  const shape = Math.round((Math.random() * 7 + 2) * 10) / 10
+  const light = Math.round((Math.random() * 7 + 2) * 10) / 10
+  const completeness = Math.round((Math.random() * 7 + 2) * 10) / 10
+  return {
+    technique, shape, light, completeness,
+    total: Math.round((technique + shape + light + completeness) / 4 * 10) / 10,
+    comment: '评分服务暂不可用，这是模拟评分。',
+    suggestions: [],
+  }
+}
+
+async function fetchScore(imageData: string): Promise<AIScore> {
+  const base64 = imageData.replace(/^data:image\/\w+;base64,/, '')
+
+  // 1. Try AI scoring
+  try {
+    const res = await $fetch<{ code: number; data: AIScore }>('/api/v1/score-ai', {
+      method: 'POST',
+      body: {
+        image: base64,
+        courseName: unitName,
+        techniqueName: currentDay?.title,
+      },
+    })
+    if (res.data) return res.data
+  } catch {}
+
+  // 2. Try rule-based scoring
   try {
     const res = await $fetch<{ code: number; data: AIScore }>('/api/v1/score', {
       method: 'POST',
-      body: { image: 'placeholder' },
+      body: { image: base64 },
     })
-    score.value = res.data
-    showScore.value = true
+    if (res.data) return res.data
+  } catch {}
 
-    // Save practice and advance progress
-    if (isLoggedIn.value && unitId) {
-      // Save practice record
-      await pb.collection('practices').create({
+  // 3. Client-side fallback
+  return fallbackScore()
+}
+
+function saveAfterScore(imageData: string, aiScore: AIScore) {
+  // Save to local store
+  store.addPractice({
+    unitId: unitId || '',
+    dayIndex: dayIndex || 0,
+    image: imageData,
+    aiScore,
+    selfPassed: false,
+  })
+
+  // Checkin
+  const today = new Date().toISOString().split('T')[0]
+  store.addCheckin(today)
+
+  // Advance enrollment
+  if (unitData?.course_id) {
+    const nextDay = dayIndex + 1
+    store.advanceEnrollment(unitData.course_id, nextDay)
+  }
+
+  // Also save to PocketBase if connected
+  if (isLoggedIn.value && pb) {
+    try {
+      pb.collection('practices').create({
         user_id: pb.authStore.record!.id,
         unit: unitId,
         day_index: dayIndex,
-        ai_score: res.data,
-        self_passed: false
-      })
+        ai_score: aiScore,
+        self_passed: false,
+      }).catch(() => {})
 
-      // Save checkin
-      const today = new Date().toISOString().split('T')[0]
-      await pb.collection('checkins').create({
+      pb.collection('checkins').create({
         user_id: pb.authStore.record!.id,
         date: today,
-      }).catch(() => {}) // ignore duplicate
+      }).catch(() => {})
 
-      // Advance enrollment to next day
-      if (unitData) {
-        const days = typeof unitData.days === 'string' ? JSON.parse(unitData.days) : (unitData.days || [])
-        const nextDay = dayIndex + 1
-        const enrollments = await pb.collection('enrollments').getFullList({
-          filter: `user_id="${pb.authStore.record!.id}" && course_id="${unitData.course_id}"`
-        })
-        if (enrollments.length) {
-          await pb.collection('enrollments').update(enrollments[0].id, {
-            current_day: Math.min(nextDay, days.length + 1)
-          })
-        }
+      if (unitData?.course_id) {
+        const enrollments = pb.collection('enrollments').getFullList({
+          filter: `user_id="${pb.authStore.record!.id}" && course_id="${unitData.course_id}"`,
+        }).then((list: any[]) => {
+          if (list.length) {
+            pb.collection('enrollments').update(list[0].id, {
+              current_day: Math.min(dayIndex + 1, 999),
+            })
+          }
+        }).catch(() => {})
       }
-    }
+    } catch {}
+  }
+}
+
+async function submitScore() {
+  if (loading.value) return
+  loading.value = true
+  try {
+    // Export actual canvas image
+    const imageData = canvasRef.value ? await canvasRef.value.exportCanvas() : ''
+
+    const aiScore = await fetchScore(imageData)
+    score.value = aiScore
+    showScore.value = true
+
+    saveAfterScore(imageData, aiScore)
   } catch (e) {
     console.error('Score failed', e)
   } finally {
@@ -288,17 +359,15 @@ function handleUpload(e: Event) {
 }
 
 async function confirmUpload() {
-  if (!uploadPreview.value) return
+  if (!uploadPreview.value || loading.value) return
   loading.value = true
   try {
-    const base64 = uploadPreview.value.replace(/^data:image\/\w+;base64,/, '')
-    const res = await $fetch<{ code: number; data: AIScore }>('/api/v1/score', {
-      method: 'POST',
-      body: { image: base64 },
-    })
-    score.value = res.data
+    const aiScore = await fetchScore(uploadPreview.value)
+    score.value = aiScore
     showUpload.value = false
     showScore.value = true
+
+    saveAfterScore(uploadPreview.value, aiScore)
   } catch (e) {
     console.error('Upload score failed', e)
   } finally {
