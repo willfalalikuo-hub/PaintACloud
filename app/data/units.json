@@ -954,5 +954,104 @@
     ],
     "name": "石膏几何体",
     "unit_index": 2
+  },
+  {
+    "collectionId": "pbc_586599074",
+    "collectionName": "units",
+    "course_id": "zyxr19p527tpjt6",
+    "id": "basic-4-perspective",
+    "name": "透视基础",
+    "description": "学习一点透视和两点透视，画出有空间感的画面。",
+    "unit_index": 4,
+    "key_points": [
+      "视平线和消失点的概念",
+      "一点透视画法",
+      "两点透视画法"
+    ],
+    "content": {
+      "day1": {
+        "sections": [
+          {
+            "title": "一、透视的基本原理",
+            "text": "透视是绘画中表现空间深度的重要技法。当物体远离观察者时，它们看起来会变小，平行线在远处会汇聚到一个点。这是透视的基本原理。\n\n**视平线（Horizon Line）** — 与观察者眼睛等高的水平线，是透视画法中最重要的参考线。视平线的高低决定了观察角度：仰视、平视或俯视。\n\n**消失点（Vanishing Point）** — 互相平行的线条在远方汇聚的那个点。所有向远处延伸的平行线都会汇聚到消失点。\n\n**一点透视** — 画面中只有一个消失点，适合表现正面观察的场景，如走廊、铁轨。所有纵深方向的线条都汇聚到这一个点。\n\n**两点透视** — 画面中有两个消失点，分别位于视平线左右两侧，适合表现成角度观察的物体，如建筑转角。"
+          },
+          {
+            "title": "二、练习要点",
+            "text": "1. 先确定视平线和消失点的位置\n2. 所有纵深线条必须指向消失点\n3. 垂直线始终保持垂直\n4. 近大远小的比例要一致\n5. 先画框架再添加细节"
+          }
+        ],
+        "tips": [
+          "用直尺辅助画透视线，确保所有线条准确汇聚到消失点",
+          "从简单的几何体开始练习，逐步过渡到复杂场景"
+        ]
+      }
+    },
+    "days": "[{\"index\": 1, \"type\": \"theory\", \"title\": \"透视原理\", \"description\": \"理解透视的基本原理和术语。\", \"steps\": [{\"index\": 1, \"title\": \"视平线与消失点\", \"description\": \"透视的核心概念\", \"referenceImage\": \"/images/references/basic-4/demo/horizon-vanishing.png\"}, {\"index\": 2, \"title\": \"一点透视示意\", \"description\": \"所有线条汇聚到一个消失点\", \"referenceImage\": \"/images/references/basic-4/demo/one-point-demo.png\"}, {\"index\": 3, \"title\": \"两点透视示意\", \"description\": \"线条分别汇聚到左右两个消失点\", \"referenceImage\": \"/images/references/basic-4/demo/two-point-demo.png\"}]}, {\"index\": 2, \"type\": \"practice\", \"title\": \"一点透视 - 走廊\", \"description\": \"用一点透视画一条走廊。\", \"referenceImage\": \"/images/references/basic-4/reference/one-point-corridor.jpg\"}, {\"index\": 3, \"type\": \"practice\", \"title\": \"一点透视 - 街道\", \"description\": \"用一点透视画一条街道。\", \"referenceImage\": \"/images/references/basic-4/reference/one-point-street.jpg\"}, {\"index\": 4, \"type\": \"practice\", \"title\": \"两点透视 - 建筑\", \"description\": \"用两点透视画一栋建筑。\", \"referenceImage\": \"/images/references/basic-4/reference/two-point-building.jpg\"}, {\"index\": 5, \"type\": \"practice\", \"title\": \"透视中的细节\", \"description\": \"在透视框架中添加门窗等细节。\", \"referenceImage\": \"/images/references/basic-4/reference/perspective-details.jpg\"}, {\"index\": 6, \"type\": \"test\", \"title\": \"综合测试\", \"description\": \"用透视法画一个完整的场景。\", \"referenceImage\": \"/images/references/basic-4/reference/perspective-scene.jpg\"}, {\"index\": 7, \"type\": \"review\", \"title\": \"AI评分总结\", \"description\": \"查看评分。\"}]"
+  },
+  {
+    "collectionId": "pbc_586599074",
+    "collectionName": "units",
+    "course_id": "zyxr19p527tpjt6",
+    "id": "basic-5-portrait",
+    "name": "人物头像基础",
+    "description": "学习人物头像的比例和基本画法。",
+    "unit_index": 5,
+    "key_points": [
+      "三庭五眼比例",
+      "五官的基本结构",
+      "头像的起稿步骤"
+    ],
+    "content": {
+      "day1": {
+        "sections": [
+          {
+            "title": "一、头部比例",
+            "text": "人物头像的绘制需要严格遵循比例关系。中国传统绘画理论中有\"三庭五眼\"的标准比例。\n\n**三庭** — 从发际线到下巴，分为三个等份：\n- 上庭：发际线到眉骨\n- 中庭：眉骨到鼻底\n- 下庭：鼻底到下巴\n\n**五眼** — 面部宽度约等于五只眼睛的宽度：\n- 左侧一只眼睛的宽度\n- 左眼本身\n- 两眼之间一只眼睛的宽度\n- 右眼本身\n- 右侧一只眼睛的宽度\n\n**五官位置规律**：\n- 眼睛位于头部二分之一处\n- 鼻底位于眼睛到下巴的二分之一处\n- 嘴巴位于鼻底到下巴的上三分之一处\n- 耳朵上缘与眉骨齐平，下缘与鼻底齐平"
+          },
+          {
+            "title": "二、练习要点",
+            "text": "1. 先用直线画出头部的大轮廓\n2. 确定三庭五眼的比例线\n3. 在比例框架内细化五官\n4. 注意左右对称\n5. 从整体到局部，不要过早画细节"
+          }
+        ],
+        "tips": [
+          "用铅笔测量法检查比例是否准确",
+          "多画几个不同角度的头骨结构，理解头部立体感"
+        ]
+      }
+    },
+    "days": "[{\"index\": 1, \"type\": \"theory\", \"title\": \"头部比例讲解\", \"description\": \"学习三庭五眼等头部比例知识。\", \"steps\": [{\"index\": 1, \"title\": \"三庭五眼\", \"description\": \"面部标准比例划分\", \"referenceImage\": \"/images/references/basic-5/demo/proportions.png\"}, {\"index\": 2, \"title\": \"五官位置\", \"description\": \"眼睛、鼻子、嘴巴的定位方法\", \"referenceImage\": \"/images/references/basic-5/demo/features-position.png\"}]}, {\"index\": 2, \"type\": \"practice\", \"title\": \"正面头像起稿\", \"description\": \"按比例画出正面头像轮廓。\", \"referenceImage\": \"/images/references/basic-5/reference/front-sketch.jpg\"}, {\"index\": 3, \"type\": \"practice\", \"title\": \"眼睛画法\", \"description\": \"练习眼睛的结构和光影。\", \"referenceImage\": \"/images/references/basic-5/reference/eye-detail.jpg\"}, {\"index\": 4, \"type\": \"practice\", \"title\": \"鼻子和嘴巴\", \"description\": \"练习鼻子和嘴巴的画法。\", \"referenceImage\": \"/images/references/basic-5/reference/nose-mouth.jpg\"}, {\"index\": 5, \"type\": \"practice\", \"title\": \"完整头像\", \"description\": \"完成一幅正面头像素描。\", \"referenceImage\": \"/images/references/basic-5/reference/front-portrait.jpg\"}, {\"index\": 6, \"type\": \"test\", \"title\": \"综合测试\", \"description\": \"画一幅侧面头像。\", \"referenceImage\": \"/images/references/basic-5/reference/side-portrait.jpg\"}, {\"index\": 7, \"type\": \"review\", \"title\": \"AI评分总结\", \"description\": \"查看评分。\"}]"
+  },
+  {
+    "collectionId": "pbc_586599074",
+    "collectionName": "units",
+    "course_id": "zyxr19p527tpjt6",
+    "id": "basic-6-sketch",
+    "name": "速写入门",
+    "description": "学习快速捕捉对象形态的速写技巧。",
+    "unit_index": 6,
+    "key_points": [
+      "快速抓住形态特征",
+      "简化和概括",
+      "动态线条的运用"
+    ],
+    "content": {
+      "day1": {
+        "sections": [
+          {
+            "title": "一、速写的思维方式",
+            "text": "速写是快速记录对象形态的绘画方式。与精细素描不同，速写强调\"抓大放小\"——抓住主要特征，忽略次要细节。\n\n**观察与概括** — 速写的第一步是观察。不要急于动笔，先用眼睛\"测量\"对象：整体是什么形状？最大的形态特征是什么？然后把这些概括为最基本的几何形状。\n\n**动态线** — 动态线是贯穿对象整体的、表现运动趋势的主要线条。在人物速写中，动态线通常是从头部贯穿到脚部的那条线。抓住动态线就抓住了动作的灵魂。\n\n**简化原则**：\n- 把复杂的形状简化为简单的几何体\n- 用最少的线条表现最多的信息\n- 先画大关系再画小细节\n- 宁可线条不够精确，也要保持流畅生动"
+          },
+          {
+            "title": "二、练习要点",
+            "text": "1. 先练习1分钟快速捕捉\n2. 用长线条概括整体，不要描边\n3. 注意观察对象的比例和动态\n4. 眼睛多看对象，少看画面\n5. 保持手腕放松，线条才有活力"
+          }
+        ],
+        "tips": [
+          "速写不是画得快，而是看得准、画得准",
+          "多画短时间的练习，比少画长时间的练习效果好"
+        ]
+      }
+    },
+    "days": "[{\"index\": 1, \"type\": \"theory\", \"title\": \"速写要领\", \"description\": \"速写的思维方式和方法。\", \"steps\": [{\"index\": 1, \"title\": \"观察与概括\", \"description\": \"用最简练的线条捕捉特征\", \"referenceImage\": \"/images/references/basic-6/demo/observe-simplify.png\"}, {\"index\": 2, \"title\": \"动态线\", \"description\": \"用流畅的线条表现运动和姿态\", \"referenceImage\": \"/images/references/basic-6/demo/dynamic-lines.png\"}]}, {\"index\": 2, \"type\": \"practice\", \"title\": \"1分钟速写\", \"description\": \"快速捕捉静物轮廓。\", \"referenceImage\": \"/images/references/basic-6/reference/quick-sketch-still.jpg\"}, {\"index\": 3, \"type\": \"practice\", \"title\": \"5分钟速写\", \"description\": \"稍长时间，加入明暗关系。\", \"referenceImage\": \"/images/references/basic-6/reference/medium-sketch.jpg\"}, {\"index\": 4, \"type\": \"practice\", \"title\": \"人物动态速写\", \"description\": \"捕捉人物运动姿态。\", \"referenceImage\": \"/images/references/basic-6/reference/figure-sketch.jpg\"}, {\"index\": 5, \"type\": \"practice\", \"title\": \"场景速写\", \"description\": \"画一个生活场景。\", \"referenceImage\": \"/images/references/basic-6/reference/scene-sketch.jpg\"}, {\"index\": 6, \"type\": \"test\", \"title\": \"综合测试\", \"description\": \"完成一幅完整的场景速写。\", \"referenceImage\": \"/images/references/basic-6/reference/scene-sketch.jpg\"}, {\"index\": 7, \"type\": \"review\", \"title\": \"AI评分总结\", \"description\": \"查看评分，完成课程。\"}]"
   }
 ]
