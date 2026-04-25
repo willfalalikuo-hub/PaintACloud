@@ -10,7 +10,7 @@
         <button @click="showUpload = true" class="text-sm text-gray-300 hover:text-white transition-colors px-2">
           上传
         </button>
-        <button @click="submitScore" :disabled="loading" class="bg-coral text-white px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors disabled:opacity-50">
+        <button @click="submitScore" :disabled="loading" class="bg-white text-gray-900 px-4 py-1.5 rounded-full text-sm hover:bg-gray-200 transition-colors disabled:opacity-50">
           {{ loading ? '评分中...' : '提交评分' }}
         </button>
       </div>
@@ -27,18 +27,23 @@
 
       <!-- Reference image panel (desktop: right side) -->
       <div v-if="showReference && referenceImages.length" class="hidden md:flex flex-col w-64 bg-gray-800 border-l border-gray-700">
-        <div class="p-3 border-b border-gray-700">
+        <div class="p-3 border-b border-gray-700 flex items-center justify-between">
           <h3 class="text-xs text-gray-400 font-medium">参考图</h3>
+          <span class="text-xs text-gray-500">{{ referenceImages.length }}张</span>
         </div>
         <div class="flex-1 overflow-auto p-3 space-y-3">
-          <div v-for="(img, i) in referenceImages" :key="i" class="bg-gray-700 rounded-lg p-2">
-            <div class="aspect-square bg-gray-600 rounded flex items-center justify-center text-gray-400 text-xs">
-              Step {{ i + 1 }}: {{ img.title }}
+          <div v-for="(img, i) in referenceImages" :key="i" class="bg-gray-700 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-gray-400/50 transition-all" @click="previewImage = img.src">
+            <img v-if="img.src" :src="img.src" :alt="img.title" class="w-full aspect-square object-cover" loading="lazy" />
+            <div v-else class="w-full aspect-square bg-gray-600 flex items-center justify-center text-gray-400 text-xs p-2 text-center">
+              {{ img.title }}
+            </div>
+            <div class="p-1.5">
+              <span class="text-xs text-gray-300 truncate block">{{ img.title }}</span>
             </div>
           </div>
         </div>
         <div class="p-3 border-t border-gray-700">
-          <label class="text-xs text-gray-400">透明度</label>
+          <label class="text-xs text-gray-400">参考图透明度</label>
           <input type="range" min="0" max="100" v-model="referenceOpacity" class="w-full mt-1" />
         </div>
       </div>
@@ -52,7 +57,7 @@
           :key="i"
           @click="currentStep = i"
           class="flex-1 py-1 rounded text-xs font-medium transition-colors"
-          :class="i === currentStep ? 'bg-coral text-white' : i < currentStep ? 'bg-coral/30 text-coral' : 'bg-gray-700 text-gray-400'"
+          :class="i === currentStep ? 'bg-white text-gray-900' : i < currentStep ? 'bg-gray-300 text-gray-700' : 'bg-gray-700 text-gray-400'"
         >
           {{ step.title }}
         </button>
@@ -70,7 +75,7 @@
               <span class="text-sm text-gray-500">技法准确度</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-coral rounded-full" :style="{ width: (score?.technique || 0) * 10 + '%' }"></div>
+                  <div class="h-full bg-gray-900 rounded-full" :style="{ width: (score?.technique || 0) * 10 + '%' }"></div>
                 </div>
                 <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.technique || 0 }}</span>
               </div>
@@ -79,7 +84,7 @@
               <span class="text-sm text-gray-500">造型能力</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-lavender rounded-full" :style="{ width: (score?.shape || 0) * 10 + '%' }"></div>
+                  <div class="h-full bg-gray-600 rounded-full" :style="{ width: (score?.shape || 0) * 10 + '%' }"></div>
                 </div>
                 <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.shape || 0 }}</span>
               </div>
@@ -88,7 +93,7 @@
               <span class="text-sm text-gray-500">光影表现</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-mint rounded-full" :style="{ width: (score?.light || 0) * 10 + '%' }"></div>
+                  <div class="h-full bg-gray-400 rounded-full" :style="{ width: (score?.light || 0) * 10 + '%' }"></div>
                 </div>
                 <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.light || 0 }}</span>
               </div>
@@ -97,7 +102,7 @@
               <span class="text-sm text-gray-500">整体完成度</span>
               <div class="flex items-center gap-2">
                 <div class="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-amber-400 rounded-full" :style="{ width: (score?.completeness || 0) * 10 + '%' }"></div>
+                  <div class="h-full bg-gray-500 rounded-full" :style="{ width: (score?.completeness || 0) * 10 + '%' }"></div>
                 </div>
                 <span class="text-sm font-bold text-gray-800 w-10 text-right">{{ score?.completeness || 0 }}</span>
               </div>
@@ -105,19 +110,19 @@
           </div>
 
           <!-- AI suggestions -->
-          <div v-if="score?.suggestions?.length" class="mb-4 bg-lavender/5 rounded-xl p-3">
-            <h4 class="text-xs font-bold text-lavender mb-2">改进建议</h4>
+          <div v-if="score?.suggestions?.length" class="mb-4 bg-gray-50 rounded-xl p-3">
+            <h4 class="text-xs font-bold text-gray-600 mb-2">改进建议</h4>
             <div v-for="(s, i) in score.suggestions" :key="i" class="flex items-start gap-2 mb-1">
-              <span class="text-lavender text-xs mt-0.5">{{ i + 1 }}.</span>
+              <span class="text-gray-400 text-xs mt-0.5">{{ i + 1 }}.</span>
               <span class="text-xs text-gray-600">{{ s }}</span>
             </div>
           </div>
 
           <!-- Total score -->
           <div class="text-center mb-4">
-            <span class="text-4xl font-bold" :class="scoreGrade.class">{{ score?.total || 0 }}</span>
+            <span class="text-4xl font-bold text-gray-900">{{ score?.total || 0 }}</span>
             <span class="text-gray-400 text-lg">/10</span>
-            <div class="text-sm mt-1" :class="scoreGrade.class">{{ scoreGrade.label }}</div>
+            <div class="text-sm mt-1 text-gray-600">{{ scoreGrade.label }}</div>
           </div>
 
           <p class="text-center text-sm text-gray-500 mb-6">{{ score?.comment || '' }}</p>
@@ -126,7 +131,7 @@
             <button @click="showScore = false" class="flex-1 py-2.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
               再画一次
             </button>
-            <NuxtLink :to="backUrl" class="flex-1 py-2.5 rounded-full text-sm font-medium bg-coral text-white text-center hover:bg-coral/90 transition-colors">
+            <NuxtLink :to="backUrl" class="flex-1 py-2.5 rounded-full text-sm font-medium bg-gray-900 text-white text-center hover:bg-gray-800 transition-colors">
               完成提交
             </NuxtLink>
           </div>
@@ -141,7 +146,7 @@
           <h2 class="text-lg font-bold text-gray-800 text-center mb-4">上传线下作品</h2>
           <p class="text-sm text-gray-400 text-center mb-4">拍照或从相册选择你的画作</p>
 
-          <label class="block w-full aspect-square border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:border-coral/50 transition-colors mb-4">
+          <label class="block w-full aspect-square border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:border-gray-400 transition-colors mb-4">
             <div v-if="!uploadPreview" class="text-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
               <p class="text-sm text-gray-400">点击选择图片</p>
@@ -154,11 +159,18 @@
             v-if="uploadPreview"
             @click="confirmUpload"
             :disabled="loading"
-            class="w-full bg-coral text-white py-2.5 rounded-full text-sm font-medium hover:bg-coral/90 transition-colors disabled:opacity-50"
+            class="w-full bg-gray-900 text-white py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
           >
             {{ loading ? '评分中...' : '确认上传并评分' }}
           </button>
         </div>
+      </div>
+    </Teleport>
+
+    <!-- Image preview modal -->
+    <Teleport to="body">
+      <div v-if="previewImage" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" @click="previewImage = ''">
+        <img :src="previewImage" class="max-w-full max-h-full object-contain rounded-lg" @click.stop />
       </div>
     </Teleport>
 
@@ -205,7 +217,28 @@ if (unitId) {
 const pageTitle = currentDay ? `${unitName} - Day${dayIndex} ${currentDay.title}` : '自由画板'
 const backUrl = unitId ? `/unit/${unitId}` : '/'
 const steps = currentDay?.steps || []
-const referenceImages = steps.length ? steps : (currentDay ? [{ title: currentDay.title }] : [])
+
+interface RefImg { title: string; src: string }
+const referenceImages = computed<RefImg[]>(() => {
+  const imgs: RefImg[] = []
+  // From theory steps
+  if (steps.length) {
+    for (const s of steps) {
+      if (s.referenceImage) imgs.push({ title: s.title, src: s.referenceImage })
+    }
+  }
+  // From practice/test day's own reference
+  if (currentDay?.referenceImage) {
+    imgs.push({ title: currentDay.title, src: currentDay.referenceImage })
+  }
+  // Additional reference images on the day
+  if (currentDay?.referenceImages?.length) {
+    for (const src of currentDay.referenceImages) {
+      imgs.push({ title: currentDay.title, src })
+    }
+  }
+  return imgs
+})
 
 // Canvas ref
 const canvasRef = ref()
@@ -214,6 +247,7 @@ const canvasRef = ref()
 const showReference = ref(false)
 const referenceOpacity = ref(80)
 const currentStep = ref(0)
+const previewImage = ref('')
 
 // Score
 const showScore = ref(false)
@@ -222,11 +256,11 @@ const loading = ref(false)
 
 const scoreGrade = computed(() => {
   const t = score.value?.total || 0
-  if (t >= 9) return { label: '优秀', class: 'text-coral' }
-  if (t >= 7) return { label: '良好', class: 'text-emerald-500' }
-  if (t >= 5) return { label: '中等', class: 'text-amber-500' }
-  if (t >= 3) return { label: '待提高', class: 'text-orange-500' }
-  return { label: '需要加把劲', class: 'text-red-400' }
+  if (t >= 9) return { label: '优秀', class: 'text-gray-900' }
+  if (t >= 7) return { label: '良好', class: 'text-gray-700' }
+  if (t >= 5) return { label: '中等', class: 'text-gray-500' }
+  if (t >= 3) return { label: '待提高', class: 'text-gray-500' }
+  return { label: '需要加把劲', class: 'text-gray-400' }
 })
 
 // Client-side fallback scoring (for static deployment)

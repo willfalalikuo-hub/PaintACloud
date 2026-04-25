@@ -8,12 +8,6 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        coral: '#FF6B6B',
-        lavender: '#9B5DE5',
-        mint: '#00F5D4',
-        'warm-bg': '#FFF8F0',
-      },
       borderRadius: {
         'xl': '1rem',
         '2xl': '1.5rem',

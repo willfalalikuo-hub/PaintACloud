@@ -7,15 +7,15 @@
 
     <div v-if="course">
       <!-- Course header -->
-      <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-6">
         <div class="flex items-start gap-4">
-          <div class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0" :style="{ backgroundColor: (course.color || '#FF6B6B') + '20' }">
-            <span class="text-2xl font-bold" :style="{ color: course.color || '#FF6B6B' }">{{ course.icon }}</span>
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-gray-100">
+            <span class="text-2xl font-bold text-gray-900">{{ course.icon }}</span>
           </div>
           <div class="flex-1">
             <div class="flex items-center gap-2">
               <h1 class="text-2xl font-bold text-gray-800">{{ course.name }}</h1>
-              <span v-if="course.tag" class="text-xs px-2 py-0.5 rounded-full bg-coral/10 text-coral">{{ course.tag }}</span>
+              <span v-if="course.tag" class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{{ course.tag }}</span>
             </div>
             <p class="text-gray-500 mt-2 text-sm leading-relaxed">{{ course.description }}</p>
             <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
@@ -27,20 +27,20 @@
         </div>
         <!-- Join button -->
         <div class="mt-4 flex justify-end">
-          <button v-if="!enrolled" @click="joinCourse" class="bg-coral text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-coral/90 transition-colors">
+          <button v-if="!enrolled" @click="joinCourse" class="bg-gray-900 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">
             加入课程
           </button>
-          <span v-else class="text-sm text-coral font-medium">已加入</span>
+          <span v-else class="text-sm text-gray-600 font-medium">已加入</span>
         </div>
       </div>
 
       <!-- Unit list -->
       <h2 class="text-lg font-bold text-gray-800 mb-4">课程大纲</h2>
       <div class="space-y-3 mb-20 md:mb-8">
-        <div v-for="unit in units" :key="unit.id" class="bg-white rounded-2xl p-5 shadow-sm">
+        <div v-for="unit in units" :key="unit.id" class="bg-white rounded-2xl p-5 border border-gray-200">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" :style="{ backgroundColor: (course.color||'#FF6B6B') + '20', color: course.color||'#FF6B6B' }">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gray-100 text-gray-900">
                 {{ unit.unit_index }}
               </div>
               <div>
@@ -48,13 +48,13 @@
                 <p class="text-xs text-gray-400 mt-0.5">{{ unit.description }}</p>
               </div>
             </div>
-            <NuxtLink :to="`/unit/${unit.id}`" class="bg-coral text-white px-4 py-1.5 rounded-full text-sm hover:bg-coral/90 transition-colors">
+            <NuxtLink :to="`/unit/${unit.id}`" class="bg-gray-900 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-800 transition-colors">
               开始学习
             </NuxtLink>
           </div>
           <div v-if="unit.key_points?.length" class="mt-3 pl-11">
             <div v-for="point in unit.key_points" :key="point" class="flex items-center gap-2 text-xs text-gray-400">
-              <span class="w-1 h-1 bg-coral rounded-full"></span>
+              <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
               {{ point }}
             </div>
           </div>
@@ -64,7 +64,7 @@
 
     <div v-else class="text-center py-20">
       <p class="text-gray-400">课程不存在</p>
-      <NuxtLink to="/" class="inline-block mt-4 text-coral hover:underline">返回首页</NuxtLink>
+      <NuxtLink to="/" class="inline-block mt-4 text-gray-900 hover:underline">返回首页</NuxtLink>
     </div>
   </div>
 </template>
