@@ -1,0 +1,32 @@
+[
+  {
+    "category": "基础",
+    "collectionId": "pbc_955655590",
+    "collectionName": "courses",
+    "color": "#FF6B6B",
+    "cover": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&h=400&fit=crop&q=80",
+    "description": "从零开始学习绘画基础，掌握线条、形体、光影等核心技能。",
+    "difficulty": "beginner",
+    "icon": "T",
+    "id": "zyxr19p527tpjt6",
+    "name": "通用基础课",
+    "tag": "免费",
+    "tag_class": "bg-coral/10 text-coral",
+    "unit_count": 3
+  },
+  {
+    "category": "传统",
+    "collectionId": "pbc_955655590",
+    "collectionName": "courses",
+    "color": "#666666",
+    "cover": "https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=600&h=400&fit=crop&q=80",
+    "description": "系统学习素描技法，从几何体到人物肖像。",
+    "difficulty": "intermediate",
+    "icon": "P",
+    "id": "w6b079u5qvh9e3k",
+    "name": "写实素描",
+    "tag": "免费",
+    "tag_class": "bg-coral/10 text-coral",
+    "unit_count": 2
+  }
+]
